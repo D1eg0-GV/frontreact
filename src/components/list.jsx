@@ -4,54 +4,65 @@ import { TodoItem } from "./items";
 
 export function Todolist() {
 const [todos, setTodos] = useState([]);
-const titleRef = useRef();
-const descRef = useRef();
-const impRef = useRef();
+const tituloRef = useRef();
+const descripcionRef = useRef();
+const importanteRef = useRef();
 
 const agregarTarea = () => {
-    const title = titleRef.current.value;
-    const desc = descRef.current.value;
-    const importante = impRef.current.checked;
+    const title = tituloRef.current.value;
+    const desc = descripcionRef.current.value;
+    const importante = importanteRef.current.checked;
+    if (title !== "" && desc === "") {
+        alert("Por favor ingresa una descripción.");
+        return;
+    }
     if ( desc === "") return;
     setTodos((prevTodos) => [
     ...prevTodos,
     {id: uuid(),title,desc,importante},
     ]);
-    titleRef.current.value = "";
-    descRef.current.value = "";
-    impRef.current.checked = false;
+    tituloRef.current.value = "";
+    descripcionRef.current.value = "";
+    importanteRef.current.checked = false;
 };
 
 const eliminarTarea = (id) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
 };
 
+const ConsultarApi = () => {
+    fetch("https://www.themealdb.com/api/json/v1/1/random.php")
+    .then((response) => response.json())
+    .then((data) => {
+        const meal = data.meals[0];
+        tituloRef.current.value = meal.strMeal;
+        descripcionRef.current.value = meal.strInstructions;
+        importanteRef.current.checked = false; // Mark as important
+    })
+};
+
 return (
     <Fragment>
-    <h1>Post It Simulator!</h1>
+    <h1>Post it Simulator!</h1>
     <div
     style={{
         display: "flex",
         gap: "10px",
         marginBottom: "20px",
-        justifyContent: "center", // Centra horizontalmente
-        alignItems: "center",     // Centra verticalmente
+        paddingLeft: "5rem", 
+        alignItems: "center", 
         width: "100%",
     }}
     >
-        <input
-        ref={titleRef}
-        type="text"
-        placeholder="Título"
-        className="form-control"
-        style={{ maxWidth: "200px" }}
+        <input ref={tituloRef} type="text" placeholder="Título" className="form-control" style={{ maxWidth: "200px" }}
         />
-        <input ref={descRef} type="text" placeholder="Descripción" className="form-control" style={{ maxWidth: "300px" }}/>
+        <input ref={descripcionRef} type="text" placeholder="Descripción" className="form-control" style={{ maxWidth: "300px" }}/>
         <div style={{ display: "flex", alignItems: "center" }}>
-        <input ref={impRef} type="checkbox" id="imp" />
+        <input ref={importanteRef} type="checkbox" id="imp" />
         <label htmlFor="imp" style={{ marginLeft: "5px", marginBottom: 0 }}>Importante!</label>
         </div>
         <button className="btn btn-dark" onClick={agregarTarea}>AGREGAR</button>
+        <button className="btn btn-dark" onClick={ConsultarApi}>Pedir una receta</button>
     </div>
     <div
         style={{

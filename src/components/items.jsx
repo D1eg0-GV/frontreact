@@ -1,7 +1,7 @@
 import React from "react";
 
 // genera una rotacion aleatoria entre -5 y +5 grados basada en el id
-function getRotationFromId(id) {
+function rotarConId(id) {
 let sum = 0;
 for (let i = 0; i < id.length; i++) sum += id.charCodeAt(i);
   const grados = (sum % 11) - 5; // Entre -5 y +5 grados
@@ -10,7 +10,7 @@ return `rotate(${grados}deg)`;
 
 export function TodoItem({ todo, eliminarTarea }) {
 const { id, title, desc, importante } = todo;
-const rotation = getRotationFromId(id);
+const rotation = rotarConId(id);
 
 return (
     <div
@@ -19,7 +19,6 @@ return (
         color: "#111",
         width: "200px",
         minHeight: "180px",
-        boxShadow: "2px 2px 8px #888",
         padding: "15px 15px 10px 15px",
         position: "relative",
         fontFamily: "inherit",
@@ -46,7 +45,7 @@ return (
         }}
         aria-label="Eliminar"
     >
-        ×
+        X
     </button>
     <div
         style={{

@@ -36,8 +36,14 @@ const ConsultarApi = () => {
     .then((data) => {
         const meal = data.meals[0];
         tituloRef.current.value = meal.strMeal;
-        descripcionRef.current.value = meal.strInstructions;
-        importanteRef.current.checked = false; // Mark as important
+        // Para que no se vea tan largo el texto en el post it
+        const caracteres = meal.strInstructions.length;
+        if (caracteres > 150) {
+            descripcionRef.current.value = meal.strInstructions.slice(0, 200) + " ...";
+        } else {
+            descripcionRef.current.value = meal.strInstructions;
+        }
+        importanteRef.current.checked = false;
     })
 };
 
